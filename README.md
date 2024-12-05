@@ -24,7 +24,6 @@ TODO
 module.exports = {
   "protected-preview": {
     enabled: true,
-    resolve: "./src/plugins/protected-preview",
     config: {
       'api::article.article': {
         'linkTimeoutInSec': 3600,  

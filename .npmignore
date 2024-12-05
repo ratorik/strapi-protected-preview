@@ -1,0 +1,14 @@
+node_modules/
+*.log
+test/
+coverage/
+functions/
+admin/
+server/
+shared/
+.git/
+.env
+*.ts
+.vscode/
+.idea/
+dist/_chunks/*.map
