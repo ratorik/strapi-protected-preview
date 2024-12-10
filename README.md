@@ -35,7 +35,7 @@ module.exports = {
 ```
 
 ## ⚙️ Configuration
-1. Add the plugin to your Strapi project by including it in your `plugins.js` configuration:
+The Protected Preview plugin comes with a customizable settings page where you can configure various parameters for generating time-limited preview links for your content. Below is an overview of how you can configure the plugin settings.
 
 ```js
 module.exports = {
