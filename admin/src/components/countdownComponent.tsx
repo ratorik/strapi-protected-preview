@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import LoaderIcon from './LoaderIcon'
 import {getTrad} from '../utils/getTrad'
 import {useIntl} from 'react-intl'
 import {Box} from '@strapi/design-system'
@@ -49,7 +48,6 @@ export const CountdownComponent: React.FC<CountdownProps> = ({ expiryDate, onExp
       justifyContent="center"
       gap={2}
     >
-      <LoaderIcon size={25} primaryColor="#4945FF" secondaryColor="#666" lineWidth={8}/>
       <Box marginLeft={2} lineHeight={"25px"} display="flex" alignItems="center">
         {formatMessage({
           id: getTrad('protected-preview.countdown.expires-in'),

@@ -15,7 +15,24 @@ The Protected Preview plugin provides a simple way to generate time-limited, pro
 - **URL Handling**: The generated preview URLs will work if the API URL starts with a UUID.
 
 ## 📦 Installation
-TODO
+```cli
+  npm i protected-preview
+```
+
+add the following to your `./config/plugins.ts` file:
+```js
+module.exports = {
+  "protected-preview": {
+    enabled: true,
+    config: {
+      'api::[Collection Types]': {
+        'linkTimeoutInSec': 3600,  
+        'previewUrl': 'http://[Some preview link]?previewKey={key}',
+      },
+    },
+  },
+};
+```
 
 ## ⚙️ Configuration
 1. Add the plugin to your Strapi project by including it in your `plugins.js` configuration:
