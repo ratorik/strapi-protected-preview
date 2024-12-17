@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Modal, Button, TextInput, Box, Typography } from '@strapi/design-system'
+import React, {useState, useEffect} from 'react'
+import {Modal, Button, TextInput, Box, Typography, Switch} from '@strapi/design-system'
 import {getTrad} from '../../../../utils/getTrad'
 import {Duplicate} from '@strapi/icons'
 import {useIntl} from 'react-intl'
@@ -10,8 +10,9 @@ interface SettingsModalProps {
   settings: any
 }
 
-const SettingsModal: React.FC<SettingsModalProps> = ({ collectionType, settings = {} }) => {
+const SettingsModal: React.FC<SettingsModalProps> = ({collectionType, settings = {}}) => {
   const [linkTimeoutInSec, setLinkTimeoutInSec] = useState(settings.linkTimeoutInSec ?? 3600)
+  const [alwaysAllowRequestsWithApiToken, setAlwaysAllowRequestsWithApiToken] = useState(settings.alwaysAllowRequestsWithApiToken ?? true)
   const [previewUrl, setPreviewUrl] = useState(settings.previewUrl ?? 'https://example.com/api/examples?status=draft&previewKey={key}')
   const [jsonConfig, setJsonConfig] = useState<string>('')
   const [copySuccess, setCopySuccess] = useState<string | null>(null)
@@ -20,13 +21,14 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ collectionType, settings 
 
   useEffect(() => {
     const config = {
-      [collectionType]: {
-        linkTimeoutInSec,
-        previewUrl,
-      },
+      linkTimeoutInSec,
+      previewUrl,
+      alwaysAllowRequestsWithApiToken
     };
-    setJsonConfig(JSON.stringify(config, null, 2))
-  }, [linkTimeoutInSec, previewUrl, collectionType])
+    const formattedConfig = `"${collectionType}": ${JSON.stringify(config, null, 2)},`
+
+    setJsonConfig(formattedConfig)
+  }, [linkTimeoutInSec, previewUrl, alwaysAllowRequestsWithApiToken, collectionType])
 
   const handleLinkTimeoutChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLinkTimeoutInSec(Number(e.target.value));
@@ -35,6 +37,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ collectionType, settings 
   const handlePreviewUrlChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPreviewUrl(e.target.value);
   };
+
+  const handleAlwaysAllowRequestsWithApiTokenChange = (checked: boolean) => {
+    console.log('checked', checked)
+    setAlwaysAllowRequestsWithApiToken(checked);
+  };
+
 
   const handleCopyJson = async () => {
     try {
@@ -75,6 +83,19 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ collectionType, settings 
         </Box>
 
         <Box marginBottom={4}>
+          <Typography>
+            Always Allow Requests With Api Token
+          </Typography>
+          <Switch
+            checked={alwaysAllowRequestsWithApiToken} // This will bind to the state
+            onCheckedChange={handleAlwaysAllowRequestsWithApiTokenChange} // Receives the new checked value
+            label="Enable API Token access"
+            visibleLabels
+          />
+        </Box>
+
+
+        <Box marginBottom={4}>
           <TextInput
             label="Preview URL"
             value={previewUrl}
@@ -86,11 +107,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ collectionType, settings 
         <Box marginBottom={4}>
           <strong>Generated JSON:</strong>
           <textarea
-            value={jsonConfig || ''}
-            readOnly
-            rows={10}
-            style={{ width: '100%', resize: 'none' }}
-            placeholder="JSON will be generated here..."
+                    value={jsonConfig || ''}
+                    readOnly
+                    rows={10}
+                    style={{width: '100%', resize: 'none', fontFamily: 'monospace', fontSize: '12px'}}
+                    placeholder="JSON will be generated here..."
           />
           <Button variant="secondary" startIcon={<Duplicate/>} onClick={handleCopyJson}>
             {formatMessage({
@@ -99,7 +120,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ collectionType, settings 
             })}
           </Button>
           {copySuccess && (
-            <Typography variant="epsilon" marginTop={2} textColor="success500" fontWeight="bold" fontSize="11px" >
+            <Typography variant="epsilon" marginTop={2} textColor="success500" fontWeight="bold" fontSize="11px">
               {copySuccess}
             </Typography>
           )}

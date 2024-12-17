@@ -16,6 +16,13 @@ export default (config: any, {strapi}: { strapi: any }) => {
     const draft = ctx.query?.status
 
     if (draft && draft !== 'published') {
+
+      const authorizationHeader = ctx.request.headers['authorization'];
+      if (authorizationHeader && authorizationHeader.startsWith('Bearer ') && rules.alwaysAllowRequestsWithApiToken ) {
+        // leave validation to strapi
+        return await next()
+      }
+
       const previewKey = ctx.query?.previewKey
 
       const entries = await strapi.documents(`plugin::${PLUGIN_ID}.draft-key`).findMany({
